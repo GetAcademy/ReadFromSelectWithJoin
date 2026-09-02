@@ -1,4 +1,8 @@
-﻿var connStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SimpleShop;Integrated Security=True";
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+using ReadFromSelectWithJoin.DTOs;
+
+var connStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SimpleShop;Integrated Security=True";
 var sql = """
               SELECT
               o.Id AS OrderId,
@@ -15,3 +19,19 @@ var sql = """
               ON c.Id = o.CustomerId;
           """;
 
+
+var conn = new SqlConnection(connStr);
+
+var customers = await conn.QueryAsync<Customer>("SELECT * FROM Customers");
+foreach (var customer in customers)
+{
+    Console.WriteLine(customer.Id + " " + customer.Name + " " + customer.Email);
+}
+
+/*
+   var customers = await conn.QueryAsync<Customer>("SELECT * FROM Customers");
+   foreach (var customer in customers)
+   {
+       Console.WriteLine(customer.Id + " " + customer.Name + " " + customer.Email);
+   }
+*/
