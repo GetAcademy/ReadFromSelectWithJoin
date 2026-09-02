@@ -22,10 +22,11 @@ var sql = """
 
 var conn = new SqlConnection(connStr);
 
-var customers = await conn.QueryAsync<Customer>("SELECT * FROM Customers");
-foreach (var customer in customers)
+var ordersWithCustomers = await conn.QueryAsync<OrderWithCustomer>(sql);
+foreach (var order in ordersWithCustomers)
 {
-    Console.WriteLine(customer.Id + " " + customer.Name + " " + customer.Email);
+    Console.WriteLine(order.OrderId + " " + order.CreatedUtc + " " + order.TotalAmount
+    + " " + order.CustomerId + " " + order.CustomerName + " " + order.CustomerEmail);
 }
 
 /*
